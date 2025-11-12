@@ -1,0 +1,13 @@
+using SupermercadoCRUD2.Models.Entity;
+
+namespace SupermercadoCRUD2.Data.Repositorios
+{
+    public interface IVentaRepositorio
+    {
+        Task<IEnumerable<Venta>> ObtenerTodasAsync();
+        Task<IEnumerable<Venta>> ObtenerPorProductoAsync(string producto);
+        Task<Venta?> ObtenerPorIdAsync(int id);
+        Task<int> InsertarAsync(Venta venta);
+        Task<int> EliminarAsync(int id);
+    }
+}

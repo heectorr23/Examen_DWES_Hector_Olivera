@@ -1,0 +1,12 @@
+﻿namespace SupermercadoCRUD2.Models.Dto
+{
+    public class VentaDto
+    {
+        public int Id { get; set; }
+        public string Producto { get; set; } = string.Empty;
+        public int Cantidad { get; set; }
+        public decimal Precio { get; set; }
+        public DateTime Fecha { get; set; }
+        public decimal Subtotal => Cantidad * Precio;
+    }
+}

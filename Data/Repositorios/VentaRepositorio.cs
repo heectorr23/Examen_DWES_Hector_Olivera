@@ -1,0 +1,53 @@
+using Microsoft.EntityFrameworkCore;
+using SupermercadoCRUD.Data;
+using SupermercadoCRUD2.Models.Entity;
+
+namespace SupermercadoCRUD2.Data.Repositorios
+{
+    public class VentaRepositorio : IVentaRepositorio
+    {
+        private readonly SupermercadoContext _context;
+
+        public VentaRepositorio(SupermercadoContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IEnumerable<Venta>> ObtenerTodasAsync()
+        {
+            return await _context.Ventas
+                .OrderByDescending(v => v.Id)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Venta>> ObtenerPorProductoAsync(string producto)
+        {
+            return await _context.Ventas
+                .Where(v => v.Producto.Contains(producto))
+                .OrderByDescending(v => v.Id)
+                .ToListAsync();
+        }
+
+        public async Task<Venta?> ObtenerPorIdAsync(int id)
+        {
+            return await _context.Ventas.FindAsync(id);
+        }
+
+        public async Task<int> InsertarAsync(Venta venta)
+        {
+            _context.Ventas.Add(venta);
+            return await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> EliminarAsync(int id)
+        {
+            var venta = await _context.Ventas.FindAsync(id);
+            if (venta != null)
+            {
+                _context.Ventas.Remove(venta);
+                return await _context.SaveChangesAsync();
+            }
+            return 0;
+        }
+    }
+}

@@ -1,0 +1,67 @@
+﻿-- Script para crear la base de datos y tablas necesarias
+-- Base de datos: ventas
+-- Usuario: root
+-- Contraseña: curso
+
+-- Crear la base de datos si no existe
+CREATE DATABASE IF NOT EXISTS ventas;
+
+USE ventas;
+
+-- Crear tabla de categorías
+CREATE TABLE IF NOT EXISTS categoria (
+    IdCategoria INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Crear tabla de productos
+CREATE TABLE IF NOT EXISTS producto (
+    IdProducto INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    IdCategoria INT NOT NULL,
+    Medida VARCHAR(50),
+    Precio INT NOT NULL,
+    Stock INT NOT NULL DEFAULT 0,
+    FOREIGN KEY (IdCategoria) REFERENCES categoria(IdCategoria)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Crear tabla de ventas
+CREATE TABLE IF NOT EXISTS Ventas (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Producto VARCHAR(100) NOT NULL,
+    Cantidad INT NOT NULL,
+    Precio DECIMAL(10, 2) NOT NULL,
+    Fecha DATETIME NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Insertar datos de prueba para categorías
+INSERT INTO categoria (Nombre) VALUES
+('Frutas y Verduras'),
+('Lácteos'),
+('Panadería'),
+('Bebidas');
+
+-- Insertar datos de prueba para productos
+INSERT INTO producto (Nombre, IdCategoria, Medida, Precio, Stock) VALUES
+('Manzanas', 1, 'kg', 150, 50),
+('Leche', 2, 'litro', 230, 30),
+('Pan', 3, 'unidad', 80, 100),
+('Agua', 4, 'litro', 50, 200),
+('Naranjas', 1, 'kg', 120, 40),
+('Yogur', 2, 'unidad', 180, 60);
+
+-- Insertar datos de prueba para ventas
+INSERT INTO Ventas (Producto, Cantidad, Precio, Fecha) VALUES
+('Manzanas', 10, 1.50, NOW()),
+('Leche', 5, 2.30, NOW()),
+('Pan', 3, 0.80, NOW());
+
+-- Verificar que se crearon los datos
+SELECT 'Categorías:' as Tabla;
+SELECT * FROM categoria;
+
+SELECT 'Productos:' as Tabla;
+SELECT * FROM producto;
+
+SELECT 'Ventas:' as Tabla;
+SELECT * FROM Ventas;

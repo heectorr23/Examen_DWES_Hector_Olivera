@@ -1,0 +1,26 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace SupermercadoCRUD2.Models.Dto
+{
+    public class VentaDto
+    {
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "El nombre del producto es requerido")]
+        [StringLength(50, ErrorMessage = "El nombre del producto no puede exceder 50 caracteres")]
+        [Display(Name = "Producto")]
+        public string Producto { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "La cantidad es requerida")]
+        [Range(1, int.MaxValue, ErrorMessage = "La cantidad debe ser mayor que 0")]
+        [Display(Name = "Cantidad")]
+        public int Cantidad { get; set; }
+
+        [Required(ErrorMessage = "El precio es requerido")]
+        [Range(0.01, 999999.99, ErrorMessage = "El precio debe estar entre 0.01 y 999999.99")]
+        [Display(Name = "Precio")]
+        public decimal Precio { get; set; }
+        
+        public decimal Subtotal => Cantidad * Precio;
+    }
+}

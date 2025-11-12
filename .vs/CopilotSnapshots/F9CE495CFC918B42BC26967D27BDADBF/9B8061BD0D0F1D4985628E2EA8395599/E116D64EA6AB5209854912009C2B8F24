@@ -1,0 +1,80 @@
+﻿@using SupermercadoCRUD2.Models.Dto
+@model IEnumerable<VentaDto>
+
+@{
+    ViewData["Title"] = "Listado de Ventas";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (TempData["Mensaje"] != null)
+{
+    <p style="color: green;">@TempData["Mensaje"]</p>
+}
+
+@if (TempData["Error"] != null)
+{
+    <p style="color: red;">@TempData["Error"]</p>
+}
+
+<div>
+    <a asp-action="Create">Añadir Nueva Venta</a>
+
+    <form asp-action="Index" method="get">
+        <input type="text" 
+               name="filtroProducto" 
+               placeholder="Filtrar por producto..." 
+               value="@ViewBag.FiltroProducto" />
+        <button type="submit">Filtrar</button>
+        @if (!string.IsNullOrWhiteSpace(ViewBag.FiltroProducto))
+        {
+            <a asp-action="Index">Limpiar</a>
+        }
+    </form>
+</div>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th>Subtotal</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var venta in Model)
+            {
+                <tr>
+                    <td>@venta.Id</td>
+                    <td>@venta.Producto</td>
+                    <td>@venta.Cantidad</td>
+                    <td>@venta.Precio.ToString("C")</td>
+                    <td><strong>@venta.Subtotal.ToString("C")</strong></td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@venta.Id">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">
+                    @if (!string.IsNullOrWhiteSpace(ViewBag.FiltroProducto))
+                    {
+                        <span>No se encontraron ventas del producto "@ViewBag.FiltroProducto"</span>
+                    }
+                    else
+                    {
+                        <span>No hay ventas registradas</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

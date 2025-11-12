@@ -1,0 +1,43 @@
+@using SupermercadoCRUD2.Models.Dto
+@model VentaDto
+
+@{
+    ViewData["Title"] = "Eliminar Venta";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p style="color: orange;"><strong>¿Está seguro que desea eliminar esta venta?</strong></p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+    <tr>
+        <th>ID:</th>
+        <td>@Model.Id</td>
+    </tr>
+    <tr>
+        <th>Producto:</th>
+        <td>@Model.Producto</td>
+    </tr>
+    <tr>
+        <th>Cantidad:</th>
+        <td>@Model.Cantidad</td>
+    </tr>
+    <tr>
+        <th>Precio:</th>
+        <td>@Model.Precio.ToString("C")</td>
+    </tr>
+    <tr>
+        <th>Subtotal:</th>
+        <td><strong>@Model.Subtotal.ToString("C")</strong></td>
+    </tr>
+</table>
+
+<br />
+
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    
+    <button type="submit">Eliminar</button>
+    <a asp-action="Index">Cancelar</a>
+</form>

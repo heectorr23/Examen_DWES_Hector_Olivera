@@ -1,0 +1,165 @@
+﻿# Sistema de Gestión de Ventas - ASP.NET MVC
+
+## Descripción
+Aplicación ASP.NET MVC para gestionar ventas en una base de datos MySQL con arquitectura en capas.
+**Las vistas utilizan HTML básico sin estilos CSS.**
+
+## Arquitectura Implementada
+
+El proyecto sigue el patrón de separación de responsabilidades en las siguientes capas:
+
+1. **Entidad** (`Models/Entity/Venta.cs`)
+   - Representa la tabla `venta` de la base de datos
+   - Mapeo con atributos de Entity Framework Core
+
+2. **DTO** (`Models/Dto/VentaDto.cs`)
+   - Objeto de transferencia de datos
+   - Incluye validaciones y cálculo del subtotal
+
+3. **Repositorio** (`Data/Repositorios/`)
+   - `IVentaRepositorio.cs` - Interfaz del repositorio
+   - `VentaRepositorio.cs` - Implementación con acceso a datos
+   - Operaciones: ObtenerTodas, ObtenerPorProducto, ObtenerPorId, Insertar, Eliminar
+
+4. **Servicio** (`servicios/ServicioVentas.cs`)
+   - Lógica de negocio
+   - Validaciones antes de insertar
+   - Mapeo entre Entidad y DTO
+
+5. **Controlador** (`Controllers/VentasController.cs`)
+   - Gestiona las peticiones HTTP
+   - Acciones: Index, Create, Delete
+
+6. **Vistas** (`Views/Ventas/`)
+   - `Index.cshtml` - Listado con filtro y botón añadir
+   - `Create.cshtml` - Formulario de nueva venta
+   - `Delete.cshtml` - Confirmación de eliminación
+   - **Todas las vistas usan HTML básico sin estilos CSS**
+
+## Configuración de Base de Datos
+
+### Paso 1: Crear la base de datos
+Ejecuta el script `database-setup.sql` en MySQL para crear la base de datos y datos de prueba:
+
+```bash
+mysql -u root -p < database-setup.sql
+```
+
+O ejecuta manualmente en MySQL Workbench o phpMyAdmin.
+
+### Paso 2: Verificar conexión
+La cadena de conexión está en `Program.cs`:
+- **Servidor:** localhost
+- **Base de datos:** ventas
+- **Usuario:** root
+- **Contraseña:** curso
+
+## Funcionalidades Implementadas
+
+### Vista Index (`/Ventas/Index`)
+- ✅ Muestra todas las ventas en tabla HTML básica
+- ✅ Calcula y muestra el subtotal (Cantidad × Precio)
+- ✅ Botón "Añadir Nueva Venta" en la parte superior
+- ✅ Campo de filtro para buscar por producto
+- ✅ Botón eliminar por cada venta
+
+### Vista Create (`/Ventas/Create`)
+- ✅ Formulario HTML básico para registrar nueva venta
+- ✅ Validaciones HTML5 nativas (required, min, max)
+- ✅ Validaciones del lado del servidor
+- ✅ Mensajes de error si la validación falla
+- ✅ Redirige a Index después de guardar
+
+### Funcionalidad Delete
+- ✅ Vista de confirmación antes de eliminar
+- ✅ Muestra los datos en tabla HTML básica
+- ✅ Elimina la venta de la base de datos
+- ✅ Mensaje de confirmación
+
+## Cómo Ejecutar
+
+### Opción 1: Visual Studio
+1. Abre el proyecto en Visual Studio 2022
+2. Presiona F5 o click en "Iniciar depuración"
+3. La aplicación se abrirá en el navegador
+
+### Opción 2: Línea de comandos
+```bash
+cd C:\Users\CampusFP\Desktop\Hector_Olivera\PrimerTrimestre\DesarrolloWebServidor\SupermercadoCRUD2
+dotnet run
+```
+
+La aplicación estará disponible en: `https://localhost:XXXX/Ventas/Index`
+
+## Estructura del Proyecto
+
+```
+SupermercadoCRUD2/
+├── Controllers/
+│   ├── VentasController.cs          # Controlador de ventas
+│   └── HomeController.cs            # Controlador de productos (legacy)
+├── Data/
+│   ├── SupermercadoContext.cs       # Contexto de Entity Framework
+│   └── Repositorios/
+│       ├── IVentaRepositorio.cs     # Interfaz del repositorio
+│       └── VentaRepositorio.cs      # Implementación del repositorio
+├── Models/
+│   ├── Entity/
+│   │   └── Venta.cs                 # Entidad de base de datos
+│   └── Dto/
+│       └── VentaDto.cs              # DTO con validaciones
+├── servicios/
+│   └── ServicioVentas.cs            # Lógica de negocio
+├── Views/
+│   ├── Shared/
+│   │   └── _Layout.cshtml           # Layout HTML básico (sin CSS)
+│   └── Ventas/
+│       ├── Index.cshtml             # Vista principal (HTML básico)
+│       ├── Create.cshtml            # Vista de creación (HTML básico)
+│       └── Delete.cshtml            # Vista de eliminación (HTML básico)
+├── Program.cs                       # Configuración de la aplicación
+└── database-setup.sql               # Script de base de datos
+```
+
+## Tecnologías Utilizadas
+
+- **Framework:** ASP.NET Core 8 MVC
+- **ORM:** Entity Framework Core
+- **Base de datos:** MySQL
+- **Provider MySQL:** Pomelo.EntityFrameworkCore.MySql 8.0.3
+- **Validaciones:** Data Annotations + HTML5 nativo
+- **Inyección de dependencias:** Built-in DI Container
+- **Interfaz:** HTML básico sin CSS/Bootstrap
+
+## Características Técnicas
+
+✅ **Separación de responsabilidades** entre capas
+✅ **Inyección de dependencias** para repositorios y servicios
+✅ **Async/Await** en todas las operaciones de base de datos
+✅ **Validaciones** tanto del lado del cliente (HTML5) como del servidor
+✅ **Mensajes de retroalimentación** con TempData
+✅ **Filtrado dinámico** de ventas por producto
+✅ **Cálculo automático** del subtotal
+✅ **HTML puro** sin frameworks CSS ni estilos externos
+
+## Notas Importantes
+
+- **Las vistas usan HTML básico sin estilos CSS ni Bootstrap**
+- La validación del lado del cliente usa atributos HTML5 nativos (required, min, max)
+- El layout es minimalista con navegación simple
+- Todas las operaciones con la base de datos se realizan a través del repositorio y servicio
+- El controlador nunca accede directamente a la base de datos
+- Se eliminó la página de Privacy/Política de Privacidad
+
+## Problemas Comunes
+
+### Error de conexión a MySQL
+- Verificar que MySQL esté ejecutándose
+- Verificar usuario y contraseña en `Program.cs`
+- Verificar que la base de datos `ventas` exista
+
+### Error de paquetes NuGet
+Ejecutar: `dotnet restore`
+
+### Puerto en uso
+Cambiar el puerto en `Properties/launchSettings.json`
